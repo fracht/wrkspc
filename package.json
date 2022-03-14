@@ -4,6 +4,9 @@
     "description": "Pack & restore yarn / npm workspaces",
     "main": "index.mjs",
     "type": "module",
+    "repository": {
+        "url": "https://github.com/ArtiomTr/wrkspc"
+    },
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1"
     },
@@ -13,8 +16,11 @@
         "monorepo",
         "mono-repo"
     ],
+    "engines": {
+        "node": ">=14"
+    },
     "author": "",
-    "license": "ISC",
+    "license": "MIT",
     "devDependencies": {
         "xo": "^0.48.0"
     },
