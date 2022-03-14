@@ -67,6 +67,8 @@ const unpack = async () => {
     }
 };
 
+const normalizePath = (path) => path.replace(/\\/g, '/');
+
 const pack = async (workingDirectory, shouldParseBinaries) => {
     const packageJson = await rpj(resolve(workingDirectory, 'package.json'));
 
@@ -83,7 +85,7 @@ const pack = async (workingDirectory, shouldParseBinaries) => {
         workspaceQueue.map(async ([key, value]) => [
             key,
             {
-                path: relative(workingDirectory, value),
+                path: normalizePath(relative(workingDirectory, value)),
                 package: await rpj(resolve(value, 'package.json')),
             },
         ]),
@@ -104,7 +106,7 @@ const pack = async (workingDirectory, shouldParseBinaries) => {
                     return undefined;
                 }
 
-                return Object.values(bin).map((binPath) => join(value.path, binPath));
+                return Object.values(bin).map((binPath) => normalizePath(join(value.path, binPath)));
             })
             .filter((value) => value !== undefined)
             .flat();
