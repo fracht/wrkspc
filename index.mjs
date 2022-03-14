@@ -30,9 +30,12 @@ const unpack = async () => {
     const workspaceLock = JSON.parse(workspaceLockSource.toString());
 
     await Promise.all(
-        Object.entries(workspaceLock.packages).map(async ([_, value]) => {
+        Object.values(workspaceLock.packages).map(async (value) => {
             const path = join(process.cwd(), value.path, 'package.json');
+
+            console.log(`Unpacking ${value.package.name} into ... ${path}`);
             const parentDir = dirname(path);
+
             try {
                 await access(parentDir);
             } catch {
@@ -40,13 +43,16 @@ const unpack = async () => {
             }
 
             await writeFile(path, JSON.stringify(value.package, null, 4));
+            console.log(`Unpacking ${value.package.name} completed`);
         }),
     );
 
     if (typeof workspaceLock.binaries === 'object') {
+        console.log('Unpacking binaries...');
         await Promise.all(
             Object.entries(workspaceLock.binaries).map(async ([path, shebang]) => {
                 const fullPath = join(process.cwd(), path);
+                console.log(`Unpacking ${fullPath} binary, with shebang ${shebang}`);
                 const parentDir = dirname(fullPath);
                 try {
                     await access(parentDir);
@@ -55,6 +61,7 @@ const unpack = async () => {
                 }
 
                 await writeFile(fullPath, shebang ?? '');
+                console.log(`Unpacking of ${fullPath} completed`);
             }),
         );
     }
@@ -70,7 +77,7 @@ const pack = async (workingDirectory, shouldParseBinaries) => {
         },
     });
 
-    const workspaceQueue = Array.from(workspaces.entries());
+    const workspaceQueue = [...workspaces.entries()];
 
     const lockedPackageEntries = await Promise.all(
         workspaceQueue.map(async ([key, value]) => [
@@ -91,7 +98,7 @@ const pack = async (workingDirectory, shouldParseBinaries) => {
     if (shouldParseBinaries) {
         const binaryPaths = lockedPackageEntries
             .map(([_, value]) => {
-                const bin = value.package.bin;
+                const { bin } = value.package;
 
                 if (typeof bin !== 'object' || bin === null) {
                     return undefined;
