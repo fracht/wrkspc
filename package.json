@@ -25,7 +25,7 @@
     "engines": {
         "node": ">=14"
     },
-    "author": "",
+    "author": "Artiom Tretjakovas",
     "license": "MIT",
     "devDependencies": {
         "xo": "^0.48.0"
