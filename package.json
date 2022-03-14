@@ -1,6 +1,6 @@
 {
     "name": "wrkspc",
-    "version": "0.1.2",
+    "version": "0.2.0",
     "description": "Pack & restore yarn / npm workspaces",
     "main": "index.mjs",
     "type": "module",
