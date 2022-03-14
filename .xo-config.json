@@ -1,0 +1,7 @@
+{
+    "space": 4,
+    "prettier": true,
+    "rules": {
+        "object-curly-spacing": ["error", "always"]
+    }
+}
