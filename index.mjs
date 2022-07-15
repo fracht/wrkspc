@@ -33,7 +33,7 @@ const unpack = async () => {
         Object.values(workspaceLock.packages).map(async (value) => {
             const path = join(process.cwd(), value.path, 'package.json');
 
-            console.log(`Unpacking ${value.package.name} into ... ${path}`);
+            console.log(`Unpacking ${value.package.name} into "${path}"`);
             const parentDir = dirname(path);
 
             try {
@@ -48,7 +48,7 @@ const unpack = async () => {
     );
 
     if (typeof workspaceLock.binaries === 'object') {
-        console.log('Unpacking binaries...');
+        console.log('Unpacking binaries');
         await Promise.all(
             Object.entries(workspaceLock.binaries).map(async ([path, shebang]) => {
                 const fullPath = join(process.cwd(), path);
