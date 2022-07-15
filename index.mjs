@@ -21,11 +21,11 @@ program
         await pack(options.dir, !options['no-binaries']);
     });
 
-program.command('unpack', 'Restore workspace from lockfile').action(async () => {
-    await unpack();
+program.command('unpack', 'Restore workspace from lockfile').option('--force', 'Overwrite existing binaries').action(async (options) => {
+    await unpack(options.force);
 });
 
-const unpack = async () => {
+const unpack = async (isForced) => {
     const workspaceLockSource = await readFile(resolve(process.cwd(), 'workspace-lock.json'));
     const workspaceLock = JSON.parse(workspaceLockSource.toString());
 
@@ -52,7 +52,21 @@ const unpack = async () => {
         await Promise.all(
             Object.entries(workspaceLock.binaries).map(async ([path, shebang]) => {
                 const fullPath = join(process.cwd(), path);
+                
+                if(!isForced){
+                    try {
+                        await access(fullPath);
+
+                        console.log(`Unpacking ${fullPath} binary skipped, already exists. Run with --force flag to overwrite existing binaries.`);
+
+                        return;
+                    } catch {
+                        // Do nothing - binary does not exist.
+                    }
+                }
+                
                 console.log(`Unpacking ${fullPath} binary, with shebang ${shebang}`);
+
                 const parentDir = dirname(fullPath);
                 try {
                     await access(parentDir);
