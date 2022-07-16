@@ -4,7 +4,7 @@
 
 ## The problem
 
-Running a NodeJS package with workspaces in docker container could be painful. To properly install dependencies, whole project structure needs to be copied. However, to avoid breaking docker caching algorithm, each `package.json` file should be copied individually. As a result, the `Dockerfile` grows dramatically, and becomes unmaintainable. To visualize this, consider the following project structure:
+Running a NodeJS package with workspaces in docker container could be painful. To properly install dependencies, whole project structure needs to be copied. However, to avoid breaking docker caching algorithm, each `package.json` file should be copied individually. As a result, the `Dockerfile` grows dramatically and becomes unmaintainable. To visualize this, consider the following project structure:
 
 ```
 |-apps
@@ -35,7 +35,7 @@ RUN npm ci
 
 And situation gets even worse, when you introduce packages with binaries in your workspace - all binaries need to be copied & compiled before installing dependencies, to help npm link all binaries.
 
-With this tool, you no longer need to think about all those horrible configurations. With `wrkspc`, that's how your configuration will look like:
+With this tool, you no longer need to think about all those horrible configurations. With `wrkspc`, that's how your dockerfiles will look like:
 
 ```Dockerfile
 FROM node:18
@@ -60,7 +60,14 @@ It's recommended to run `wrkspc` packing command after each `package.json` chang
 }
 ```
 
-This will generate `workspace-lock.json` file. This file should be included into your VCS (git, svn, etc.)
+This will generate `workspace-lock.json` file after each `npm install` command run. This file should be included into your VCS (git, svn, etc.)
+To restore your npm / yarn workspace, run `unpack` command, in the directory, which contains `workspace-lock.json` file:
+
+```sh
+npx wrkspc unpack
+```
+
+This will re-create whole package structure.
 
 ## Commands
 
