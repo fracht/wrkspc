@@ -1,5 +1,9 @@
 # wrkspc
 
+[![npm version](https://img.shields.io/npm/v/wrkspc)](https://www.npmjs.com/package/wrkspc)
+[![npm downloads](https://img.shields.io/npm/dw/wrkspc)](https://www.npmjs.com/package/wrkspc)
+[![vulnerabilities](https://img.shields.io/snyk/vulnerabilities/npm/wrkspc)](https://www.npmjs.com/package/wrkspc)
+
 > Tiny tool to save & restore npm / yarn workspace
 
 ## The problem
