@@ -66,3 +66,13 @@ This will generate `workspace-lock.json` file. This file should be included into
 
 -   pack - Generate a lockfile of your npm / yarn workspace.
 -   unpack - Restore npm / yarn workspace from lockfile.
+
+## Contributing
+
+Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
+
+Please make sure to update tests as appropriate.
+
+## License
+
+MIT © [Artiom Tretjakovas](https://github.com/ArtiomTr)
