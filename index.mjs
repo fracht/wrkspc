@@ -99,6 +99,10 @@ const getWorkspaces = async (workingDirectory, packageJson) => {
         }
     }
 
+    if (!workspaces) {
+        throw new Error("No workspaces config found.");
+    }
+
     return workspaces;
 }
 
