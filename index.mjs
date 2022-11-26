@@ -2,6 +2,8 @@
 
 import { mkdir, readFile, writeFile, access } from 'node:fs/promises';
 import { resolve, relative, join, dirname } from 'node:path';
+import fs from 'node:fs';
+import { parse } from 'yaml';
 import process from 'node:process';
 
 import mapWorkspaces from '@npmcli/map-workspaces';
@@ -83,13 +85,36 @@ const unpack = async (isForced) => {
 
 const normalizePath = (path) => path.replace(/\\/g, '/');
 
+const getWorkspaces = async (workingDirectory, packageJson) => {
+    let workspaces = packageJson.workspaces;
+
+    if (!workspaces) {
+        const pnpmWorkspacesPath = resolve(workingDirectory, 'pnpm-workspace.yaml');
+
+        if (fs.existsSync(pnpmWorkspacesPath)) {
+            const file = await fs.promises.readFile(pnpmWorkspacesPath);
+            const pnpmWorkspacesConfig = parse(file.toString());
+
+            workspaces = pnpmWorkspacesConfig.packages;
+        }
+    }
+
+    if (!workspaces) {
+        throw new Error("No workspaces config found.");
+    }
+
+    return workspaces;
+}
+
 const pack = async (workingDirectory, shouldParseBinaries) => {
     const packageJson = await rpj(resolve(workingDirectory, 'package.json'));
+
+    const definedWorkspaces = await getWorkspaces(workingDirectory, packageJson);
 
     const workspaces = await mapWorkspaces({
         cwd: workingDirectory,
         pkg: {
-            workspaces: packageJson.workspaces,
+            workspaces: definedWorkspaces,
         },
     });
 

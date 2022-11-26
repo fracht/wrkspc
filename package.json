@@ -34,6 +34,7 @@
         "@npmcli/map-workspaces": "^2.0.1",
         "read-package-json-fast": "^2.0.3",
         "sade": "^1.8.1",
-        "shebang-regex": "^3.0.0"
+        "shebang-regex": "^3.0.0",
+        "yaml": "^1.10.2"
     }
 }
