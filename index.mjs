@@ -3,7 +3,7 @@
 import { mkdir, readFile, writeFile, access } from 'node:fs/promises';
 import { resolve, relative, join, dirname } from 'node:path';
 import fs from 'node:fs';
-import { parse } from 'yaml';
+import YAML from 'yaml';
 import process from 'node:process';
 
 import mapWorkspaces from '@npmcli/map-workspaces';
@@ -93,7 +93,7 @@ const getWorkspaces = async (workingDirectory, packageJson) => {
 
         if (fs.existsSync(pnpmWorkspacesPath)) {
             const file = await fs.promises.readFile(pnpmWorkspacesPath);
-            const pnpmWorkspacesConfig = parse(file.toString());
+            const pnpmWorkspacesConfig = YAML.parse(file.toString());
 
             workspaces = pnpmWorkspacesConfig.packages;
         }
